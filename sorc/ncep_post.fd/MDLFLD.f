@@ -3306,6 +3306,7 @@ refl_adj:           IF(REF_10CM(I,J,L)<=DBZmin) THEN
 !     +,QI1(ii,jj) ,QS1(ii,jj),T1D(ii,jj),P1D(ii,jj)
 
         CALL CALVIS(Q1D,QW1,QR1,QI1,QS1,T1D,P1D,VIS)
+        CALL CALVIS_GSD(CZEN,VIS)
 
 !        print*,'Debug: Visbility ',Q1D(ii,jj),QW1(ii,jj),QR1(ii,jj),QI1(ii,jj)
 !     +,QS1(ii,jj),T1D(ii,jj),P1D(ii,jj)
@@ -3313,9 +3314,13 @@ refl_adj:           IF(REF_10CM(I,J,L)<=DBZmin) THEN
 
 	 DO J=JSTA,JEND
 	 DO I=1,IM
-	  IF(abs(vis(i,j)).gt.24135.1)print*,'bad visbility'     &
+!	  IF(abs(vis(i,j)).gt.24135.1)print*,'bad visbility'     &
+	  IF(abs(vis(i,j)).gt.24135.1) then
+         print*,'bad visbility'     &
        , i,j,Q1D(i,j),QW1(i,j),QR1(i,j),QI1(i,j)                 &
        , QS1(i,j),T1D(i,j),P1D(i,j),vis(i,j)
+          vis(i,j)=24135.
+          ENDIF
 	  GRID1(I,J)=VIS(I,J)
 	END DO
 	END DO  
@@ -3334,7 +3339,7 @@ refl_adj:           IF(REF_10CM(I,J,L)<=DBZmin) THEN
 ! --- GSD VISIBILITY
 !
       IF (IGET(410).GT.0) THEN
-        CALL CALVIS_GSD(CZEN,VIS)
+!        CALL CALVIS_GSD(CZEN,VIS)
         DO J=JSTA,JEND
         DO I=1,IM
           GRID1(I,J)=VIS(I,J)
